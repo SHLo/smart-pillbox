@@ -10,9 +10,9 @@ import os
 from azure.iot.device.aio import IoTHubModuleClient
 import azure.cosmos.cosmos_client as cosmos_client
 import base64
-import cv2
 import logging
 import mouth
+import eye
 
 logger = logging.getLogger('__name__')
 
@@ -55,26 +55,13 @@ def create_client():
     return client
 
 
-async def run_sample(client, cap):
+async def run_sample(client):
     # Customize this coroutine to do whatever tasks the module initiates
     # e.g. sending messages
 
-    face_cascade = cv2.CascadeClassifier(
-        './config/haarcascade_frontalface_default.xml')
-
-    while cap.isOpened():
+    while True:
         print('loop')
-        _, img = cap.read()
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1,
-                                              minNeighbors=5,
-                                              minSize=(30, 30),
-                                              flags=cv2.CASCADE_SCALE_IMAGE)
-        print(len(faces))
-        if len(faces) > 0:
-            print('face detected!')
-            mouth.speak('hello world')
-
+        eye.snap()
         await asyncio.sleep(1)
 
 
@@ -106,7 +93,6 @@ def main():
     # Define a handler to cleanup when module is is terminated by Edge
     def module_termination_handler(signal, frame):
         print("IoTHubClient sample stopped by Edge")
-        cap.release()
         stop_event.set()
 
     # Set the Edge termination handler
@@ -114,11 +100,10 @@ def main():
 
     update_user_data()
     # Run the sample
-    cap = cv2.VideoCapture(0)
 
     loop = asyncio.get_event_loop()
     try:
-        loop.run_until_complete(run_sample(client, cap))
+        loop.run_until_complete(run_sample(client))
     except Exception as e:
         print("Unexpected error %s " % e)
         raise

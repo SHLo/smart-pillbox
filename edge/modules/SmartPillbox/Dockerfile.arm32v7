@@ -52,6 +52,12 @@ RUN pip install --no-cache-dir \
     azure-cosmos \
     gpiozero
 
+RUN wget https://github.com/joan2937/pigpio/archive/master.zip && \
+    unzip master.zip && \
+    cd pigpio-master && \
+    make && \
+    make install
+
 WORKDIR /app
 
 #COPY requirements.txt ./
@@ -59,6 +65,6 @@ WORKDIR /app
 
 COPY . .
 
-ENTRYPOINT ["python", "main.py"]
+ENTRYPOINT ["bash", "init.sh"]
 
 # sudo docker run --privileged=true --device /dev/vchiq --device /dev/snd

@@ -67,9 +67,6 @@
               "createOptions": {
                 "HostConfig": {
                   "Privileged": true,
-                  "Binds": [
-                    "/sys"
-                  ],
                   "Devices": [
                     {
                       "PathOnHost": "/dev/vchiq",

@@ -65,29 +65,51 @@
             "settings": {
               "image": "${MODULES.SmartPillbox.debug}",
               "createOptions": {
-                "ExposedPorts": {
-                  "5678/tcp": {}
-                },
                 "HostConfig": {
-                  "PortBindings": {
-                    "5678/tcp": [
-                      {
-                        "HostPort": "5678"
-                      }
-                    ]
-                  }
+                  "Privileged": true,
+                  "Devices": [
+                    {
+                      "PathOnHost": "/dev/vchiq",
+                      "PathInContainer": "/dev/vchiq",
+                      "CgroupPermissions": "mrw"
+                    },
+                    {
+                      "PathOnHost": "/dev/snd",
+                      "PathInContainer": "/dev/snd",
+                      "CgroupPermissions": "mrw"
+                    },
+                    {
+                      "PathOnHost": "/dev/i2c-1",
+                      "PathInContainer": "/dev/i2c-1",
+                      "CgroupPermissions": "mrw"
+                    },
+                    {
+                      "PathOnHost": "/dev/gpiomem",
+                      "PathInContainer": "/dev/gpiomem",
+                      "CgroupPermissions": "rwm"
+                    },
+                    {
+                      "PathOnHost": "/dev/mem",
+                      "PathInContainer": "/dev/mem",
+                      "CgroupPermissions": "rwm"
+                    }
+                  ]
                 }
               }
-            }
-          },
-          "SimulatedTemperatureSensor": {
-            "version": "1.0",
-            "type": "docker",
-            "status": "running",
-            "restartPolicy": "always",
-            "settings": {
-              "image": "mcr.microsoft.com/azureiotedge-simulated-temperature-sensor:1.0",
-              "createOptions": {}
+            },
+            "env": {
+              "DB_HOST": {
+                "value": "$DB_HOST"
+              },
+              "DB_KEY": {
+                "value": "$DB_KEY"
+              },
+              "DATABASE_ID": {
+                "value": "$DATABASE_ID"
+              },
+              "USERS_CONTAINER_ID": {
+                "value": "$USERS_CONTAINER_ID"
+              }
             }
           }
         }
@@ -97,8 +119,7 @@
       "properties.desired": {
         "schemaVersion": "1.1",
         "routes": {
-          "SmartPillboxToIoTHub": "FROM /messages/modules/SmartPillbox/outputs/* INTO $upstream",
-          "sensorToSmartPillbox": "FROM /messages/modules/SimulatedTemperatureSensor/outputs/temperatureOutput INTO BrokeredEndpoint(\"/modules/SmartPillbox/inputs/input1\")"
+          "SmartPillboxToIoTHub": "FROM /messages/modules/SmartPillbox/outputs/* INTO $upstream"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200

@@ -4,7 +4,7 @@
   "image": {
     "repository": "shlo/smart-pillbox",
     "tag": {
-      "version": "0.0.1.3",
+      "version": "0.0.1.11",
       "platforms": {
         "amd64": "./Dockerfile.amd64",
         "amd64.debug": "./Dockerfile.amd64.debug",
