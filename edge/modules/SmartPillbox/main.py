@@ -13,6 +13,7 @@ import base64
 import logging
 import mouth
 import eye
+import users
 
 logger = logging.getLogger('__name__')
 
@@ -25,8 +26,6 @@ USERS_CONTAINER_ID = os.getenv('USERS_CONTAINER_ID')
 
 # Event indicating client stop
 stop_event = threading.Event()
-
-users = []
 
 
 def create_client():
@@ -65,25 +64,6 @@ async def run_sample(client):
         await asyncio.sleep(1)
 
 
-def update_user_data():
-    global users
-
-    db_client = cosmos_client.CosmosClient(
-        DB_HOST, {'masterKey': DB_KEY}, user_agent=IOTEDGE_MODULEID, user_agent_overwrite=True)
-    db = db_client.get_database_client(DATABASE_ID)
-    users_container = db.get_container_client(USERS_CONTAINER_ID)
-
-    users_new = []
-
-    query = f'SELECT * FROM {USERS_CONTAINER_ID} WHERE {USERS_CONTAINER_ID}.device_id = "{IOTEDGE_DEVICEID}"'
-
-    for user in users_container.query_items(query=query, enable_cross_partition_query=True):
-        user['photo'] = base64.b64decode(user['photo'].encode('utf-8'))
-        users_new.append(user)
-
-    users = users_new
-
-
 def main():
     print("IoT Hub Client for Python")
 
@@ -98,7 +78,7 @@ def main():
     # Set the Edge termination handler
     signal.signal(signal.SIGTERM, module_termination_handler)
 
-    update_user_data()
+    users.update_data()
     # Run the sample
 
     loop = asyncio.get_event_loop()

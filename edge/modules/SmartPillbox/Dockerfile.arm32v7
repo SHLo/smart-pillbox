@@ -50,6 +50,7 @@ RUN apt-get install -y \
 RUN pip install --no-cache-dir \
     azure-core \
     azure-cosmos \
+    azure-cognitiveservices-vision-face \
     gpiozero
 
 RUN wget https://github.com/joan2937/pigpio/archive/master.zip && \

@@ -1,5 +1,6 @@
 import cv2
 import mouth
+import users
 
 face_cascade = cv2.CascadeClassifier(
     './config/haarcascade_frontalface_default.xml')
@@ -12,6 +13,7 @@ def snap():
 
     if detect_face(img):
         print('face detected!')
+        print(users.match_user(img))
         mouth.speak('hello')
 
     cap.release()
