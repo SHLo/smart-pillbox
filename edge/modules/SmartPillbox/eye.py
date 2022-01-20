@@ -15,7 +15,8 @@ def snap():
         print('face detected!')
         user = users.match_user(img)
         if user:
-            mouth.speak(f'hello {user["first_name"]}')
+            mouth.speak(
+                f'hello {user["first_name"]}, please take your pills in slot {user["slot"]}')
 
     cap.release()
 
