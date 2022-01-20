@@ -59,6 +59,8 @@ RUN wget https://github.com/joan2937/pigpio/archive/master.zip && \
     make && \
     make install
 
+RUN CFLAGS=-fcommon pip install RPi.GPIO
+
 WORKDIR /app
 
 #COPY requirements.txt ./

@@ -109,6 +109,12 @@
               },
               "USERS_CONTAINER_ID": {
                 "value": "$USERS_CONTAINER_ID"
+              },
+              "FACE_ENDPOINT": {
+                "value": "$FACE_ENDPOINT"
+              },
+              "FACE_KEY": {
+                "value": "$FACE_KEY"
               }
             }
           }
