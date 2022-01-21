@@ -6,22 +6,10 @@ import asyncio
 import sys
 import signal
 import threading
-import os
+import mouth
+import json
 from azure.iot.device.aio import IoTHubModuleClient
-import azure.cosmos.cosmos_client as cosmos_client
-import base64
-import logging
-import eye
-import users
 
-logger = logging.getLogger('__name__')
-
-IOTEDGE_DEVICEID = os.getenv('IOTEDGE_DEVICEID')
-IOTEDGE_MODULEID = os.getenv('IOTEDGE_MODULEID')
-DB_HOST = os.getenv('DB_HOST')
-DB_KEY = os.getenv('DB_KEY')
-DATABASE_ID = os.getenv('DATABASE_ID')
-USERS_CONTAINER_ID = os.getenv('USERS_CONTAINER_ID')
 
 # Event indicating client stop
 stop_event = threading.Event()
@@ -34,13 +22,13 @@ def create_client():
     async def receive_message_handler(message):
         # NOTE: This function only handles messages sent to "input1".
         # Messages sent to other inputs, or to the default, will be discarded
-        if message.input_name == "input1":
-            print("the data in the message received on input1 was ")
+        if message.input_name == "script":
+            print("the data in the message received on script was ")
             print(message.data)
             print("custom properties are")
             print(message.custom_properties)
-            print("forwarding mesage to output1")
-            await client.send_message_to_output(message, "output1")
+            text = json.loads(message.data)['text']
+            mouth.speak(text)
 
     try:
         # Set handler on the client
@@ -56,11 +44,8 @@ def create_client():
 async def run_sample(client):
     # Customize this coroutine to do whatever tasks the module initiates
     # e.g. sending messages
-
     while True:
-        print('loop')
-        await eye.snap(client)
-        await asyncio.sleep(1)
+        await asyncio.sleep(1000)
 
 
 def main():
@@ -77,9 +62,7 @@ def main():
     # Set the Edge termination handler
     signal.signal(signal.SIGTERM, module_termination_handler)
 
-    users.update_data()
     # Run the sample
-
     loop = asyncio.get_event_loop()
     try:
         loop.run_until_complete(run_sample(client))

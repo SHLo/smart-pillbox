@@ -107,6 +107,27 @@
                 "value": "$FACE_KEY"
               }
             }
+          },
+          "Mouth": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.Mouth}",
+              "createOptions": {
+                "HostConfig": {
+                  "Devices": [
+                    {
+                      "PathOnHost": "/dev/snd",
+                      "PathInContainer": "/dev/snd",
+                      "CgroupPermissions": "mrw"
+                    }
+                  ]
+                }
+              }
+            },
+            "env": {}
           }
         }
       }
@@ -115,7 +136,8 @@
       "properties.desired": {
         "schemaVersion": "1.1",
         "routes": {
-          "SmartPillboxToIoTHub": "FROM /messages/modules/SmartPillbox/outputs/* INTO $upstream"
+          "SmartPillboxToIoTHub": "FROM /messages/modules/SmartPillbox/outputs/* INTO $upstream",
+          "EyeToMouth": "FROM /messages/modules/SmartPillbox/outputs/mouth INTO BrokeredEndpoint(\"/modules/Mouth/inputs/script\")"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200

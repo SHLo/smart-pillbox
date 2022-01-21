@@ -4,6 +4,6 @@ engine.setProperty('rate', 125)
 engine.setProperty('volume', 0.5)
 
 
-def speak(script):
-    engine.say(script)
+def speak(text):
+    engine.say(text)
     engine.runAndWait()

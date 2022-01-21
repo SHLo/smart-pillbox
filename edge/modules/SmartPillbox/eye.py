@@ -1,12 +1,13 @@
 import cv2
-import mouth
+import json
+from azure.iot.device import Message
 import users
 
 face_cascade = cv2.CascadeClassifier(
     './config/haarcascade_frontalface_default.xml')
 
 
-def snap():
+async def snap(client):
     cap = cv2.VideoCapture(0)
     # cap.isOpened()
     _, img = cap.read()
@@ -15,8 +16,9 @@ def snap():
         print('face detected!')
         user = users.match_user(img)
         if user:
-            mouth.speak(
-                f'hello {user["first_name"]}, please take your pills in slot {user["slot"]}')
+            print(f'user detected! {user}')
+            text = f'hello {user["first_name"]}, please take your pills in slot {user["slot"]}'
+            await client.send_message_to_output(Message(json.dumps({'text': text}), content_encoding='utf-8', content_type='application/json'), 'mouth')
 
     cap.release()
 

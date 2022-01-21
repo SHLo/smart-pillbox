@@ -1,0 +1,19 @@
+FROM arm32v7/python:3.10-bullseye
+
+RUN apt-get update && apt-get install -y \
+    vim \
+    git \
+    alsa-utils \
+    espeak
+
+RUN pip install --no-cache-dir \
+    azure-iot-device \
+    pyttsx3
+
+WORKDIR /app
+
+COPY . .
+
+ENTRYPOINT ["bash", "init.debug.sh"]
+
+# sudo docker run --device /dev/snd
