@@ -38,15 +38,28 @@ RUN pip install --no-cache-dir \
     opencv-contrib-python \
     opencv-python
 
+# Required for RPi.GPIO
+RUN wget https://github.com/joan2937/pigpio/archive/master.zip && \
+    unzip master.zip && \
+    cd pigpio-master && \
+    make && \
+    make install
+
+RUN CFLAGS=-fcommon pip install RPi.GPIO
+
 
 RUN pip install --no-cache-dir \
     requests \
+    asyncio \
     tornado==4.5.3 \
     azure-iot-device \
     azure-mgmt-iothub \
-    asyncio \
-    pyttsx3 \
     azure-core \
-    azure-cosmos
+    azure-cosmos \
+    azure-cognitiveservices-vision-face \
+    pyttsx3 \
+    gpiozero
+
+
 
 # sudo docker run --privileged=true --device /dev/vchiq --device /dev/snd
