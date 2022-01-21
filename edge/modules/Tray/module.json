@@ -2,9 +2,9 @@
   "$schema-version": "0.0.1",
   "description": "",
   "image": {
-    "repository": "shlo/smart-pillbox",
+    "repository": "shlo/rpi4-step-motor",
     "tag": {
-      "version": "0.0.1.17",
+      "version": "0.0.0.2",
       "platforms": {
         "arm32v7": "./Dockerfile.arm32v7",
         "arm32v7.debug": "./Dockerfile.arm32v7.debug"

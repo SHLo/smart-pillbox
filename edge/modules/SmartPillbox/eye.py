@@ -19,6 +19,7 @@ async def snap(client):
             print(f'user detected! {user}')
             text = f'hello {user["first_name"]}, please take your pills in slot {user["slot"]}'
             await client.send_message_to_output(Message(json.dumps({'text': text}), content_encoding='utf-8', content_type='application/json'), 'mouth')
+            await client.send_message_to_output(Message(json.dumps({'motor': 'a', 'rounds': 2, 'clock_wise': True}), content_encoding='utf-8', content_type='application/json'), 'tray')
 
     cap.release()
 

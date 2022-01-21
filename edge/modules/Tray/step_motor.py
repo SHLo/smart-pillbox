@@ -1,5 +1,4 @@
 import RPi.GPIO as GPIO
-import asyncio
 import time
 
 
@@ -36,29 +35,26 @@ class StepMotor():
             GPIO.output(pin, GPIO.LOW)
 
     def rotate(self, rounds, clock_wise=True):
-        async def async_rotate():
-            self.setup()
-            step_count = int(StepMotor.step_count_360 * rounds)
-            motor_step_counter = 0
+        self.setup()
+        step_count = int(StepMotor.step_count_360 * rounds)
+        motor_step_counter = 0
 
-            for _ in range(step_count):
-                for i, pin in enumerate(self.pins):
-                    GPIO.output(pin,
-                                StepMotor.step_sequence[motor_step_counter][i])
+        for _ in range(step_count):
+            for i, pin in enumerate(self.pins):
+                GPIO.output(pin,
+                            StepMotor.step_sequence[motor_step_counter][i])
 
-                if clock_wise:
-                    motor_step_counter += 1
-                else:
-                    motor_step_counter -= 1
+            if clock_wise:
+                motor_step_counter += 1
+            else:
+                motor_step_counter -= 1
 
-                motor_step_counter %= len(StepMotor.step_sequence)
+            motor_step_counter %= len(StepMotor.step_sequence)
 
-                # time.sleep(StepMotor.step_sleep)
-                await asyncio.sleep(StepMotor.step_sleep)
+            # time.sleep(StepMotor.step_sleep)
+            time.sleep(StepMotor.step_sleep)
 
-            self.cleanup()
-
-        asyncio.run(async_rotate())
+        self.cleanup()
 
 
 step_motor_a = StepMotor([17, 18, 27, 22])

@@ -128,6 +128,28 @@
               }
             },
             "env": {}
+          },
+          "Tray": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.Tray}",
+              "createOptions": {
+                "HostConfig": {
+                  "Privileged": true,
+                  "Devices": [
+                    {
+                      "PathOnHost": "/dev/gpiomem",
+                      "PathInContainer": "/dev/gpiomem",
+                      "CgroupPermissions": "mrw"
+                    }
+                  ]
+                }
+              }
+            },
+            "env": {}
           }
         }
       }
@@ -137,7 +159,8 @@
         "schemaVersion": "1.1",
         "routes": {
           "SmartPillboxToIoTHub": "FROM /messages/modules/SmartPillbox/outputs/* INTO $upstream",
-          "EyeToMouth": "FROM /messages/modules/SmartPillbox/outputs/mouth INTO BrokeredEndpoint(\"/modules/Mouth/inputs/script\")"
+          "EyeToMouth": "FROM /messages/modules/SmartPillbox/outputs/mouth INTO BrokeredEndpoint(\"/modules/Mouth/inputs/script\")",
+          "EyeToTray": "FROM /messages/modules/SmartPillbox/outputs/tray INTO BrokeredEndpoint(\"/modules/Tray/inputs/rotate\")"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
