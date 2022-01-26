@@ -150,6 +150,35 @@
               }
             },
             "env": {}
+          },
+          "Reminder": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.Reminder.debug}",
+              "createOptions": {
+                "HostConfig": {}
+              }
+            },
+            "env": {
+              "DB_HOST": {
+                "value": "$DB_HOST"
+              },
+              "DB_KEY": {
+                "value": "$DB_KEY"
+              },
+              "DATABASE_ID": {
+                "value": "$DATABASE_ID"
+              },
+              "USERS_CONTAINER_ID": {
+                "value": "$USERS_CONTAINER_ID"
+              },
+              "ACTIVITIES_CONTAINER_ID": {
+                "value": "$ACTIVITIES_CONTAINER_ID"
+              }
+            }
           }
         }
       }
@@ -160,7 +189,8 @@
         "routes": {
           "SmartPillboxToIoTHub": "FROM /messages/modules/SmartPillbox/outputs/* INTO $upstream",
           "EyeToMouth": "FROM /messages/modules/SmartPillbox/outputs/mouth INTO BrokeredEndpoint(\"/modules/Mouth/inputs/script\")",
-          "EyeToTray": "FROM /messages/modules/SmartPillbox/outputs/tray INTO BrokeredEndpoint(\"/modules/Tray/inputs/rotate\")"
+          "EyeToTray": "FROM /messages/modules/SmartPillbox/outputs/tray INTO BrokeredEndpoint(\"/modules/Tray/inputs/rotate\")",
+          "ReminderToMouth": "FROM /messages/modules/Reminder/outputs/mouth INTO BrokeredEndpoint(\"/modules/Mouth/inputs/script\")"
         },
         "storeAndForwardConfiguration": {
           "timeToLiveSecs": 7200
