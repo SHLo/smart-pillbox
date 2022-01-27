@@ -48,17 +48,7 @@ RUN wget https://github.com/joan2937/pigpio/archive/master.zip && \
 RUN CFLAGS=-fcommon pip install RPi.GPIO
 
 
-RUN pip install --no-cache-dir \
-    requests \
-    asyncio \
-    tornado==4.5.3 \
-    azure-iot-device \
-    azure-mgmt-iothub \
-    azure-core \
-    azure-cosmos \
-    azure-cognitiveservices-vision-face \
-    pyttsx3 \
-    gpiozero
+
 
 
 

@@ -1,1 +1,1 @@
-pigpiod && tail -f /dev/null
+tzupdate && tail -f /dev/null

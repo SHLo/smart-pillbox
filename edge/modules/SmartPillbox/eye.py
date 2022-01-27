@@ -3,6 +3,7 @@ import json
 from azure.iot.device import Message
 import users
 import asyncio
+import activities
 
 face_cascade = cv2.CascadeClassifier(
     './config/haarcascade_frontalface_default.xml')
@@ -18,10 +19,12 @@ async def snap(client):
         user = users.match_user(img)
         if user:
             print(f'user detected! {user}')
-            text = f'hello {user["first_name"]}, please take your pills in slot {user["slot"]}'
-            await client.send_message_to_output(Message(json.dumps({'text': text}), content_encoding='utf-8', content_type='application/json'), 'mouth')
-            await client.send_message_to_output(Message(json.dumps({'motor': user['slot'], 'rounds': 2, 'clock_wise': True}), content_encoding='utf-8', content_type='application/json'), 'tray')
-            await asyncio.sleep(5)
+            if not activities.is_completed(user):
+                activities.set_completed(user)
+                text = f'hello {user["first_name"]}, please take your pills in slot {user["slot"]}'
+                await client.send_message_to_output(Message(json.dumps({'text': text}), content_encoding='utf-8', content_type='application/json'), 'mouth')
+                await client.send_message_to_output(Message(json.dumps({'motor': user['slot'], 'rounds': 1 / 21, 'clock_wise': True}), content_encoding='utf-8', content_type='application/json'), 'tray')
+                await asyncio.sleep(5)
 
     cap.release()
 

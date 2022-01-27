@@ -1,1 +1,1 @@
-pigpiod && python main.py
+tzupdate && python main.py
