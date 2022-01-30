@@ -58,7 +58,6 @@ async def run_sample(client):
     # e.g. sending messages
 
     while True:
-        print('loop')
         await eye.snap(client)
         await asyncio.sleep(1)
 

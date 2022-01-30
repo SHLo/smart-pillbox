@@ -4,6 +4,9 @@ from azure.iot.device import Message
 import users
 import asyncio
 import activities
+import logging
+
+logger = logging.getLogger('__name__')
 
 face_cascade = cv2.CascadeClassifier(
     './config/haarcascade_frontalface_default.xml')
@@ -15,13 +18,13 @@ async def snap(client):
     _, img = cap.read()
 
     if detect_face(img):
-        print('face detected!')
+        logger.warning('face detected!')
         user = users.match_user(img)
         if user:
-            print(f'user detected! {user}')
+            logger.warning(f'user detected! {user}')
             if not activities.is_completed(user):
                 activities.set_completed(user)
-                text = f'hello {user["first_name"]}, please take your pills in slot {user["slot"]}'
+                text = f'hello {user["first_name"]}, please take your pills in tray {user["slot"]}'
                 await client.send_message_to_output(Message(json.dumps({'text': text}), content_encoding='utf-8', content_type='application/json'), 'mouth')
                 await client.send_message_to_output(Message(json.dumps({'motor': user['slot'], 'rounds': 1 / 21, 'clock_wise': True}), content_encoding='utf-8', content_type='application/json'), 'tray')
                 await asyncio.sleep(5)
