@@ -130,7 +130,17 @@
                 }
               }
             },
-            "env": {}
+            "env": {
+              "AWS_DEFAULT_REGION": {
+                "value": "$AWS_DEFAULT_REGION"
+              },
+              "AWS_ACCESS_KEY_ID": {
+                "value": "$AWS_ACCESS_KEY_ID"
+              },
+              "AWS_SECRET_ACCESS_KEY": {
+                "value": "$AWS_SECRET_ACCESS_KEY"
+              }
+            }
           },
           "Tray": {
             "version": "1.0",

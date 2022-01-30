@@ -3,12 +3,16 @@ import asyncio
 import users
 import json
 import activities
+import logging
 from azure.iot.device import Message
 
 from datetime import timedelta
 
+logger = logging.getLogger('__name__')
+
 
 def remind(user, client):
+    logger.warning(f'reminde {user["first_name"]}')
     speak(user, client)
 
     activities.create(user)
@@ -28,8 +32,11 @@ def speak(user, client):
 
 def repeat_remind(user, client):
     if activities.is_completed(user):
+        logger.warning(
+            f'{user["first_name"]} has completed, cancel the repeat reminder')
         return schedule.CancelJob
 
+    logger.warning(f'reminde {user["first_name"]} repeatly')
     speak(user, client)
 
 
@@ -40,6 +47,7 @@ def reset_schedule(client):
     for user in users.get_data():
         for t in user['schedule']['time']:
             schedule.every().day.at(t).do(remind, user=user, client=client)
+            logger.warning(f'set reminder for {user["first_name"]} at {t}')
 
 
 async def loop():
