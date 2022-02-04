@@ -5,6 +5,7 @@ import users
 import asyncio
 import activities
 import logging
+import ocr
 
 logger = logging.getLogger('__name__')
 
@@ -16,6 +17,7 @@ async def snap(client):
     cap = cv2.VideoCapture(0)
     # cap.isOpened()
     _, img = cap.read()
+    cap.release()
 
     if detect_face(img):
         logger.warning('face detected!')
@@ -23,13 +25,20 @@ async def snap(client):
         if user:
             logger.warning(f'user detected! {user}')
             if not activities.is_completed(user):
-                activities.set_completed(user)
-                text = f'hello {user["first_name"]}, please take your pills in tray {user["slot"]}'
-                await client.send_message_to_output(Message(json.dumps({'text': text}), content_encoding='utf-8', content_type='application/json'), 'mouth')
                 await client.send_message_to_output(Message(json.dumps({'motor': user['slot'], 'rounds': 1 / 21, 'clock_wise': True}), content_encoding='utf-8', content_type='application/json'), 'tray')
+                text = f'hello {user["first_name"]}, please take your pills in tray {user["slot"]}, and put the label in front of the camera'
+                await speak(text, client)
+
+                await ocr.check_label(user, client)
+
+                activities.set_completed(user)
+
                 await asyncio.sleep(5)
 
-    cap.release()
+
+async def speak(text, client):
+    await client.send_message_to_output(Message(json.dumps(
+        {'text': text}), content_encoding='utf-8', content_type='application/json'), 'mouth')
 
 
 def detect_face(img):

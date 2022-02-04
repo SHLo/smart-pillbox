@@ -108,6 +108,12 @@
               },
               "FACE_KEY": {
                 "value": "$FACE_KEY"
+              },
+              "CV_ENDPOINT": {
+                "value": "$CV_ENDPOINT"
+              },
+              "CV_KEY": {
+                "value": "$CV_KEY"
               }
             }
           },

@@ -11,7 +11,8 @@ RUN pip install --no-cache-dir \
     azure-cognitiveservices-vision-face \
     pyttsx3 \
     gpiozero \
-    tzupdate
+    tzupdate \
+    azure-cognitiveservices-vision-computervision
 
 
 WORKDIR /app

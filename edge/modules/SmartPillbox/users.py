@@ -61,3 +61,9 @@ def match_user(img):
         for user in data:
             if face_client.face.verify_face_to_face(face.face_id, user['face_id']).is_identical:
                 return user
+
+
+def other_user(the_user):
+    for user in data:
+        if user['id'] != the_user['id']:
+            return user
