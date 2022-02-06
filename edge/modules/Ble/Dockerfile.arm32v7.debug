@@ -1,0 +1,17 @@
+FROM arm32v7/python:3.10-bullseye
+
+RUN apt-get update && apt-get install -y \
+    bluez  \
+    bluetooth
+
+RUN pip install --no-cache-dir \
+    azure-iot-device \
+    bleak 
+
+WORKDIR /app
+
+COPY . .
+
+ENTRYPOINT ["bash", "init.debug.sh"]
+
+# sudo docker run --net=host --privileged
