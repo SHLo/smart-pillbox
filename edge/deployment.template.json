@@ -167,7 +167,14 @@
                 }
               }
             },
-            "env": {}
+            "env": {
+              "ADDRESS_A": {
+                "value": "$ADDRESS_A"
+              },
+              "ADDRESS_B": {
+                "value": "$ADDRESS_B"
+              }
+            }
           },
           "Tray": {
             "version": "1.0",
