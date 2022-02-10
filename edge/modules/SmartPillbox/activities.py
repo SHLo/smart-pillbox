@@ -51,3 +51,7 @@ def set_completed(user):
     item['completed_time'] = get_curr_time_str()
 
     container.replace_item(item=item, body=item)
+
+
+def get_scheduled_time(user):
+    return get_last_activity(user)['scheduled_time']

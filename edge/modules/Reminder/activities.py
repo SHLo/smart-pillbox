@@ -22,17 +22,35 @@ def create(user):
     item = {
         'id': str(uuid.uuid4()),
         'user_id': user['id'],
-        'scheduled_time': now.strftime('%Y-%m-%d %H:%M')
+        'scheduled_time': get_curr_time_str()
     }
 
     container.create_item(body=item)
 
 
-def is_completed(user):
+def get_last_activity(user):
     query = f'SELECT * FROM {ACTIVITIES_CONTAINER_ID} WHERE {ACTIVITIES_CONTAINER_ID}.user_id = "{user["id"]}" \
         ORDER BY {ACTIVITIES_CONTAINER_ID}.scheduled_time DESC OFFSET 0 LIMIT 1'
 
     [item] = container.query_items(
         query=query, enable_cross_partition_query=True)
 
-    return 'completed_time' in item
+    return item
+
+
+def is_completed(user):
+    return 'completed_time' in get_last_activity(user)
+
+
+def get_curr_time_str():
+    return datetime.datetime.now().strftime('%Y-%m-%d %H:%M')
+
+
+def set_completed(user):
+    item = get_last_activity(user)
+    item['completed_time'] = get_curr_time_str()
+
+    container.replace_item(item=item, body=item)
+
+def get_scheduled_time(user):
+    return get_last_activity(user)['scheduled_time']

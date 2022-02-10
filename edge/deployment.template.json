@@ -148,6 +148,27 @@
               }
             }
           },
+          "Ble": {
+            "version": "1.0",
+            "type": "docker",
+            "status": "running",
+            "restartPolicy": "always",
+            "settings": {
+              "image": "${MODULES.Ble}",
+              "createOptions": {
+                "NetworkingConfig": {
+                  "EndpointsConfig": {
+                    "host": {}
+                  }
+                },
+                "HostConfig": {
+                  "Privileged": true,
+                  "NetworkMode": "host"
+                }
+              }
+            },
+            "env": {}
+          },
           "Tray": {
             "version": "1.0",
             "type": "docker",

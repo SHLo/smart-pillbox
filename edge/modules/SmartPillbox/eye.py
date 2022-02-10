@@ -35,10 +35,15 @@ async def snap(client):
 
                 await asyncio.sleep(5)
 
+            else:
+                text = f'hello {user["first_name"]}, you have taken your pills. Please wait for the next reminder'
+                await speak(text, client)
+
 
 async def speak(text, client):
     await client.send_message_to_output(Message(json.dumps(
         {'text': text}), content_encoding='utf-8', content_type='application/json'), 'mouth')
+    await asyncio.sleep(5)
 
 
 def detect_face(img):
