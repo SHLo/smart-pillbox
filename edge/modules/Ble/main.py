@@ -10,15 +10,12 @@ import mouth
 import json
 import logging
 from azure.iot.device.aio import IoTHubModuleClient
-from collections import deque
 import ble
 
 logger = logging.getLogger('__name__')
 
 # Event indicating client stop
 stop_event = threading.Event()
-
-speech_queue = deque()
 
 
 def create_client():
@@ -28,13 +25,14 @@ def create_client():
     async def receive_message_handler(message):
         # NOTE: This function only handles messages sent to 'input1'.
         # Messages sent to other inputs, or to the default, will be discarded
-        if message.input_name == 'script':
+        if message.input_name == 'tray':
             logger.warning('the data in the message received on script was ')
             logger.warning(message.data)
             logger.warning('custom properties are')
             logger.warning(message.custom_properties)
-            text = json.loads(message.data)['text']
-            speech_queue.append(text)
+            msg_dict = json.loads(message.data)
+            tray = msg_dict['tray']
+            await ble.remind(tray)
 
     try:
         # Set handler on the client
@@ -51,9 +49,7 @@ async def run_sample(client):
     # Customize this coroutine to do whatever tasks the module initiates
     # e.g. sending messages
     while True:
-        if speech_queue:
-            text = speech_queue.popleft()
-            mouth.speak(text)
+        asyncio.sleep(1000)
 
 
 def main():

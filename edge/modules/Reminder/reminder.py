@@ -13,7 +13,7 @@ logger = logging.getLogger('__name__')
 
 def remind(user, client):
     logger.warning(f'reminde {user["first_name"]}')
-    speak(user, client)
+    notify(user, client)
 
     activities.create(user)
 
@@ -23,11 +23,14 @@ def remind(user, client):
         repeat_remind, user=user, client=client)
 
 
-def speak(user, client):
-    text = f'{user["first_name"]}, it is your time to take pills in tray {user["slot"]}'
+def notify(user, client):
+    tray = user['tray']
+    text = f'{user["first_name"]}, it is your time to take pills in tray {tray}'
 
     client.send_message_to_output(Message(json.dumps(
         {'text': text}), content_encoding='utf-8', content_type='application/json'), 'mouth')
+    client.send_message_to_output(Message(json.dumps(
+        {'tray': tray}), content_encoding='utf-8', content_type='application/json'), 'ble')
 
 
 def repeat_remind(user, client):
@@ -37,7 +40,7 @@ def repeat_remind(user, client):
         return schedule.CancelJob
 
     logger.warning(f'reminde {user["first_name"]} repeatly')
-    speak(user, client)
+    notify(user, client)
 
 
 def reset_schedule(client):
