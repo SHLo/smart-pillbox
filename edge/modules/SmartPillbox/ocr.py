@@ -50,7 +50,6 @@ def extract_nums(s):
     return ''.join([c for c in s if c.isdigit()])
 
 
-
 async def check_label(user, client):
     while True:
         cap = cv2.VideoCapture(0)
@@ -66,9 +65,8 @@ async def check_label(user, client):
 
         if len(lines) != 3:
             continue
-        
-        date_label, time_label, name_label = lines
 
+        date_label, time_label, name_label = lines
 
         if users.other_user(user)['first_name'].lower() in name_label.lower():
             text = f'You picked the wrong tray. Please take the pill pack from the other tray'
@@ -84,16 +82,15 @@ async def check_label(user, client):
             await speak(text, client)
             continue
 
-
         if user['first_name'].lower() in name_label.lower() and datetime_nums == scheduled_time_nums:
             text = f'Great! That is exactly the right pill pack for you!'
             await speak(text, client)
             break
 
-        await asyncio.sleep(1)
+        await asyncio.sleep(2)
 
 
 async def speak(text, client):
     await client.send_message_to_output(Message(json.dumps(
         {'text': text}), content_encoding='utf-8', content_type='application/json'), 'mouth')
-    await asyncio.sleep(5)
+    await asyncio.sleep(10)

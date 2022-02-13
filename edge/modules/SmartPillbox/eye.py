@@ -43,7 +43,7 @@ async def snap(client):
 async def speak(text, client):
     await client.send_message_to_output(Message(json.dumps(
         {'text': text}), content_encoding='utf-8', content_type='application/json'), 'mouth')
-    await asyncio.sleep(5)
+    await asyncio.sleep(10)
 
 
 def detect_face(img):
