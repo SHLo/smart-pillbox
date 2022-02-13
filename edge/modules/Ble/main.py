@@ -6,7 +6,6 @@ import asyncio
 import sys
 import signal
 import threading
-import mouth
 import json
 import logging
 from azure.iot.device.aio import IoTHubModuleClient
