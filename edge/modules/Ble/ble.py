@@ -11,7 +11,7 @@ ADDRESS_B = os.getenv('ADDRESS_B', '')
 
 
 async def remind(tray):
-    address = {'a': ADDRESS_A, 'b': ADDRESS_B}[tray]
+    address = {'top': ADDRESS_A, 'bottom': ADDRESS_B}[tray]
 
     async with BleakClient(address) as client:
         for service in client.services:

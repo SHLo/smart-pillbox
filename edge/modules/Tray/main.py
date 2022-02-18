@@ -32,8 +32,8 @@ def create_client():
             logger.warning(message.custom_properties)
             cmd = json.loads(message.data)
 
-            motor = {'a': step_motor.step_motor_a,
-                     'b': step_motor.step_motor_b}[cmd['motor']]
+            motor = {'top': step_motor.step_motor_top,
+                     'bottom': step_motor.step_motor_bottom}[cmd['motor']]
             rounds = cmd['rounds']
             clock_wise = cmd['clock_wise']
 

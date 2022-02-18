@@ -57,5 +57,5 @@ class StepMotor():
         self.cleanup()
 
 
-step_motor_a = StepMotor([17, 18, 27, 22])
-step_motor_b = StepMotor([23, 24, 10, 25])
+step_motor_top = StepMotor([17, 18, 27, 22])
+step_motor_bottom = StepMotor([23, 24, 10, 25])

@@ -27,7 +27,7 @@ def remind(user, client):
 
 def notify(user, client):
     tray = user['tray']
-    text = f'{user["first_name"]}, it is your time to take pills in tray {tray}'
+    text = f'{user["first_name"]}, it is your time to take pills in {tray} tray'
 
     client.send_message_to_output(Message(json.dumps(
         {'text': text}), content_encoding='utf-8', content_type='application/json'), 'mouth')

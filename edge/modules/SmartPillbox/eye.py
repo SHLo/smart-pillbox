@@ -26,7 +26,7 @@ async def snap(client):
             logger.warning(f'user detected! {user}')
             if not activities.is_completed(user):
                 await client.send_message_to_output(Message(json.dumps({'motor': user['tray'], 'rounds': 1 / 21, 'clock_wise': True}), content_encoding='utf-8', content_type='application/json'), 'tray')
-                text = f'hello {user["first_name"]}, please take your pills in tray {user["tray"]}, and put the label in front of the camera'
+                text = f'hello {user["first_name"]}, please take your pills in {user["tray"]} tray, and put the label in front of the camera'
                 await speak(text, client)
 
                 await ocr.check_label(user, client)
