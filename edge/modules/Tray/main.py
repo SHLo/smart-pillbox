@@ -8,7 +8,10 @@ import signal
 import threading
 import step_motor
 import json
+import logging
 from azure.iot.device.aio import IoTHubModuleClient
+
+logger = logging.getLogger('__name__')
 
 
 # Event indicating client stop
@@ -23,13 +26,14 @@ def create_client():
         # NOTE: This function only handles messages sent to "input1".
         # Messages sent to other inputs, or to the default, will be discarded
         if message.input_name == "rotate":
-            print("the data in the message received on rotate was ")
-            print(message.data)
-            print("custom properties are")
-            print(message.custom_properties)
+            logger.warning("the data in the message received on rotate was ")
+            logger.warning(message.data)
+            logger.warning("custom properties are")
+            logger.warning(message.custom_properties)
             cmd = json.loads(message.data)
 
-            motor = {'a': step_motor.step_motor_a, 'b': step_motor.step_motor_b}[cmd['motor']]
+            motor = {'a': step_motor.step_motor_a,
+                     'b': step_motor.step_motor_b}[cmd['motor']]
             rounds = cmd['rounds']
             clock_wise = cmd['clock_wise']
 
@@ -54,14 +58,14 @@ async def run_sample(client):
 
 
 def main():
-    print("IoT Hub Client for Python")
+    logger.warning("IoT Hub Client for Python")
 
     # NOTE: Client is implicitly connected due to the handler being set on it
     client = create_client()
 
     # Define a handler to cleanup when module is is terminated by Edge
     def module_termination_handler(signal, frame):
-        print("IoTHubClient sample stopped by Edge")
+        logger.warning("IoTHubClient sample stopped by Edge")
         stop_event.set()
 
     # Set the Edge termination handler
@@ -72,10 +76,10 @@ def main():
     try:
         loop.run_until_complete(run_sample(client))
     except Exception as e:
-        print("Unexpected error %s " % e)
+        logger.warning("Unexpected error %s " % e)
         raise
     finally:
-        print("Shutting down IoT Hub Client...")
+        logger.warning("Shutting down IoT Hub Client...")
         loop.run_until_complete(client.shutdown())
         loop.close()
 
