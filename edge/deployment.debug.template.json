@@ -236,7 +236,7 @@
         "routes": {
           "SmartPillboxToIoTHub": "FROM /messages/modules/SmartPillbox/outputs/* INTO $upstream",
           "EyeToMouth": "FROM /messages/modules/SmartPillbox/outputs/mouth INTO BrokeredEndpoint(\"/modules/Mouth/inputs/script\")",
-          "EyeToTray": "FROM /messages/modules/SmartPillbox/outputs/tray INTO BrokeredEndpoint(\"/modules/Tray/inputs/rotate\")",
+          "ReminderToTray": "FROM /messages/modules/Reminder/outputs/tray INTO BrokeredEndpoint(\"/modules/Tray/inputs/rotate\")",
           "ReminderToMouth": "FROM /messages/modules/Reminder/outputs/mouth INTO BrokeredEndpoint(\"/modules/Mouth/inputs/script\")",
           "ReminderToBle": "FROM /messages/modules/Reminder/outputs/ble INTO BrokeredEndpoint(\"/modules/Ble/inputs/tray\")"
         },
