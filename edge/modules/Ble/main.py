@@ -48,7 +48,7 @@ async def run_sample(client):
     # Customize this coroutine to do whatever tasks the module initiates
     # e.g. sending messages
     while True:
-        asyncio.sleep(1000)
+        await asyncio.sleep(1000)
 
 
 def main():
