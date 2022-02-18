@@ -32,10 +32,14 @@ def get_last_activity(user):
     query = f'SELECT * FROM {ACTIVITIES_CONTAINER_ID} WHERE {ACTIVITIES_CONTAINER_ID}.user_id = "{user["id"]}" \
         ORDER BY {ACTIVITIES_CONTAINER_ID}.scheduled_time DESC OFFSET 0 LIMIT 1'
 
-    [item] = container.query_items(
-        query=query, enable_cross_partition_query=True)
+    try:
+        item = container.query_items(
+            query=query, enable_cross_partition_query=True).next()
 
-    return item
+        return item
+
+    except:
+        return {}
 
 
 def is_completed(user):
@@ -51,6 +55,7 @@ def set_completed(user):
     item['completed_time'] = get_curr_time_str()
 
     container.replace_item(item=item, body=item)
+
 
 def get_scheduled_time(user):
     return get_last_activity(user)['scheduled_time']
