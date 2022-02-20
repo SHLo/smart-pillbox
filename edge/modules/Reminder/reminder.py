@@ -11,13 +11,14 @@ from datetime import timedelta
 logger = logging.getLogger('__name__')
 
 
-def remind(user, client):
+def remind(user, client, scheduled_time=None):
+
     logger.warning(f'reminde {user["first_name"]}')
     notify(user, client)
     client.send_message_to_output(Message(json.dumps(
         {'motor': user['tray'], 'rounds': 1 / 21, 'clock_wise': True}), content_encoding='utf-8', content_type='application/json'), 'tray')
 
-    activities.create(user)
+    activities.create(user, scheduled_time)
 
     repeat_interval = 1
 

@@ -38,3 +38,9 @@ def update_data():
 
 def get_data():
     return data
+
+def get_user(first_name):
+    for user in data:
+        if user['first_name'].lower() == first_name.lower():
+            return user
+    return {}

@@ -16,13 +16,13 @@ db = db_client.get_database_client(DATABASE_ID)
 container = db.get_container_client(ACTIVITIES_CONTAINER_ID)
 
 
-def create(user):
+def create(user, scheduled_time=None):
     now = datetime.datetime.now()
 
     item = {
         'id': str(uuid.uuid4()),
         'user_id': user['id'],
-        'scheduled_time': get_curr_time_str()
+        'scheduled_time': scheduled_time if scheduled_time else get_curr_time_str()
     }
 
     container.create_item(body=item)
@@ -30,7 +30,7 @@ def create(user):
 
 def get_last_activity(user):
     query = f'SELECT * FROM {ACTIVITIES_CONTAINER_ID} WHERE {ACTIVITIES_CONTAINER_ID}.user_id = "{user["id"]}" \
-        ORDER BY {ACTIVITIES_CONTAINER_ID}.scheduled_time DESC OFFSET 0 LIMIT 1'
+        ORDER BY {ACTIVITIES_CONTAINER_ID}._ts DESC OFFSET 0 LIMIT 1'
 
     try:
         item = container.query_items(
